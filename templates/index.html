@@ -17,6 +17,21 @@
             background-size: 200% 200%;
             animation: gradient-shift 3s ease infinite;
         }
+
+        .chat-item {
+            @apply flex items-center justify-between p-3 mb-2 rounded-lg transition-all duration-200 cursor-pointer;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+        }
+
+        .chat-item:hover {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(147, 51, 234, 0.2) 100%);
+            transform: translateX(4px);
+        }
+
+        .chat-item.active {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.8) 0%, rgba(147, 51, 234, 0.8) 100%);
+            @apply text-white shadow-md;
+        }
     </style>
 </head>
 <body class="bg-gray-100 h-screen">
@@ -152,12 +167,19 @@
 
                 data.chats.forEach(chat => {
                     const li = document.createElement('li');
-                    li.textContent = chat.name;
+                    li.className = `w-full ${chat.id === activeChatId 
+                        ? 'bg-blue-500' 
+                        : 'bg-blue-600'} hover:bg-red-600 text-white py-2 px-4 rounded-lg flex items-center mb-2 transition-colors`;
+                    
+                    li.innerHTML = `
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-comments"></i>
+                            <span class="font-medium">${chat.name}</span>
+                        </div>
+                    `;
+                    
                     li.setAttribute('data-id', chat.id);
                     li.onclick = () => selectChat(chat.id);
-                    if (chat.id === activeChatId) {
-                        li.style.backgroundColor = '#e74c3c';  // Highlight active chat
-                    }
                     chatList.appendChild(li);
                 });
             })
